@@ -9,11 +9,7 @@ const port = process.env.PORT || 3000;
 app.use("/api", router);
 app.use("/api", incomeRouter);
 //============================== swagger  ===========================
-app.use(
-  "/api-docs",
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerSpec)
-);
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.listen(port, () => {
   console.log(`Server running port:${port}`);
 });

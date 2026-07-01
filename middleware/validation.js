@@ -8,6 +8,7 @@ export function validateUserData(req, res, next) {
   let error;
   if (result.error) {
     error = result.error.details[0].message;
+    res.status(400).send({ error });
   }
   next();
 }
@@ -22,12 +23,16 @@ export function validateUserLogin(req, res, next) {
   next();
 }
 // ------------------------------------------- INCOME --------------------------------------------------
-export function validateUserIncome(req, res, next) {
+export function validateUserIncome(err, req, res, next) {
   //  validation
-  const result = incomeSchema.validate(req.body);
-  let error;
-  if (result.error) {
-    error = result.error.details[0].message;
+  try {
+    const result = incomeSchema.validate(req.body);
+    let error;
+    if (result.error) {
+      error = result.error.details[0].message;
+    }
+    next();
+  } catch (err) {
+    res.status(500).send("Intern al Server Error");
   }
-  next();
-};
+}

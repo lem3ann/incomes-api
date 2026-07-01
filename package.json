@@ -13,12 +13,12 @@
   "dependencies": {
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "joi": "^18.2.3",
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1",
     "uuid": "^14.0.1"
   },
   "devDependencies": {
-    "joi": "^18.2.3",
     "jshint": "^2.13.6",
     "morgan": "^1.11.0",
     "nodemon": "^3.1.14"
