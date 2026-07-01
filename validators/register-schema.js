@@ -1,7 +1,9 @@
 import Joi from "joi";
 // ===================================================   JOI SCHEMA ==============================================
 const userSchema = Joi.object({
-  id: Joi.string().guid({ version: "uuidv4" }),
+  id: Joi.string().guid({
+    version: "uuidv4"
+  }),
   name: Joi.string().alphanum().min(3).max(35).required(),
   surname: Joi.string().alphanum().min(3).max(35).required(),
   username: Joi.string().alphanum().min(3).max(35).required(),

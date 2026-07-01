@@ -8,11 +8,9 @@ const options = {
       version: "1.0.0",
       description: "API Documentation",
     },
-    servers: [
-      {
-        url: "http://localhost:3000",
-      },
-    ],
+    servers: [{
+      url: "http://localhost:3000",
+    }, ],
   },
   apis: ["./routes/*.js"],
 };
