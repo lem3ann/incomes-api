@@ -6,50 +6,38 @@ import {
 } from "../middleware/validation.js";
 import userSchema from "../validators/register-schema.js";
 import loginSchema from "../validators/login-schema.js";
-import {
-  users
-} from "../database/users-db.js";
-import {
-  v4 as uuidv4
-} from "uuid";
+import { users } from "../database/users-db.js";
+import { v4 as uuidv4 } from "uuid";
 import morgan from "morgan";
 const router = express.Router();
-
 router.use(express.json());
 
 // ================================================ REGISTER ================================================================
-router.post("/register", (req, res) => {
-  const {
-    name,
-    surname,
-    username,
-    email,
-    password,
-    phone
-  } = req.body;
+router.post("/register", validateUserData, (req, res) => {
+  try {
+    const { name, surname, username, email, password, phone } = req.body;
 
-  const newUser = {
-    id: uuidv4(),
-    name: name,
-    surname: surname,
-    username: username,
-    email: email,
-    phone: phone,
-    password: password,
-  };
-  const duplicateData = users.find((c) => c.username === newUser.username);
-  if (duplicateData) {
-    return res.send("Duplicate Data!");
+    const newUser = {
+      id: uuidv4(),
+      name: name,
+      surname: surname,
+      username: username,
+      email: email,
+      phone: phone,
+      password: password,
+    };
+    const duplicateData = users.find((c) => c.username === newUser.username);
+    if (duplicateData) {
+      return res.send("Duplicate Data!");
+    }
+    users.push(newUser);
+    res.send(users, "successfully created").status(201);
+  } catch (error) {
+    if (error) {
+      res.status(400).send(error);
+      return;
+    }
   }
-  const result = userSchema.validate(req.body);
-  let error;
-  if (result.error) {
-    error = result.error.details[0].message;
-    res.status(400).send(error);
-    return;
-  }
-  users.push(newUser);
-  res.send(users, "successfully created").status(201);
 });
 // ----------------------------- SWAGGER -----------------------------
 /**
@@ -64,14 +52,7 @@ router.post("/register", (req, res) => {
 // morgan("dev");
 // ==================================================== LOGIN ==============================================================
 router.post("/login/add", (req, res) => {
-  const {
-    name,
-    surname,
-    username,
-    email,
-    password,
-    phone
-  } = req.body;
+  const { name, surname, username, email, password, phone } = req.body;
   const currentUser = {
     id: uuidv4(),
     username: username,
@@ -88,8 +69,8 @@ router.post("/login/add", (req, res) => {
   // check compatibility
   let mainUser = users.find(
     (u) =>
-    u.username === currentUser.username &&
-    u.password === currentUser.password,
+      u.username === currentUser.username &&
+      u.password === currentUser.password,
   );
   if (mainUser) {
     res.send("Login successfully");
